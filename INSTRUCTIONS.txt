@@ -1,0 +1,25 @@
+# Set up environment
+conda env create -f environment.yml
+conda activate gigapose
+bash src/scripts/install_env.sh
+
+# to install megapose
+pip install -e .
+
+# to install bop_toolkit 
+pip install git+https://github.com/thodan/bop_toolkit.git --use-deprecated=legacy-resolver
+
+# download cnos detections for BOP'23 dataset
+pip install -U "huggingface_hub[cli]"
+python -m src.scripts.download_default_detections
+
+# download gigaPose's checkpoints 
+python -m src.scripts.download_gigapose
+
+# download megapose's checkpoints
+python -m src.scripts.download_megapose
+
+# If at this point any libraries don't work, uninstall and reinstall them
+
+# This should run if everything else worked
+python test.py test_dataset_name=hope run_id=$NAME_RUN test_setting=detection
